@@ -1,4 +1,8 @@
+import logging
+
 from sqlmodel import Session
+
+logger = logging.getLogger(__name__)
 
 
 class UnitOfWork:
@@ -8,23 +12,38 @@ class UnitOfWork:
     """
 
     def __init__(self, session: Session):
+        print("DEBUG: Initializing UnitOfWork")
+        logger.info("Initializing UnitOfWork")
         self.session = session
+        self._committed = False
 
     def commit(self):
+        print("DEBUG: UnitOfWork - Calling session.commit()")
+        logger.info("UnitOfWork: Calling session.commit()")
         self.session.commit()
+        self._committed = True
+        print("DEBUG: UnitOfWork - session.commit() completed")
+        logger.info("UnitOfWork: session.commit() completed")
 
     def rollback(self):
+        print("DEBUG: UnitOfWork - Calling session.rollback()")
+        logger.info("UnitOfWork: Calling session.rollback()")
         self.session.rollback()
+        print("DEBUG: UnitOfWork - session.rollback() completed")
+        logger.info("UnitOfWork: session.rollback() completed")
 
     def __enter__(self):
+        print("DEBUG: UnitOfWork - Entering context")
+        logger.info("UnitOfWork: Entering context")
+
         return self
 
-    def close(self):
-        self.session.close()
-
     def __exit__(self, exc_type, exc_val, exc_tb):
+        print(f"DEBUG: UnitOfWork - Exiting context, exc_type={exc_type}")
+        logger.info(f"UnitOfWork: Exiting context, exc_type={exc_type}")
         if exc_type is None:  # 예외 없음
             self.commit()  # 커밋
         else:  # 예외 발생
             self.rollback()  # 롤백
-        self.session.close()
+        print(f"DEBUG: UnitOfWork - Exited, committed={self._committed}")
+        logger.info(f"UnitOfWork: Exited, committed={self._committed}")

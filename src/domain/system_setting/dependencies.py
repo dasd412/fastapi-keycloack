@@ -9,16 +9,16 @@ from domain.system_setting.service import SystemSettingService
 from domain.system_setting.unit_of_work import SystemSettingUnitOfWork
 
 
-def get_system_setting_repository(session: Annotated[Session, Depends(PGSession())]) -> SystemSettingRepository:
-    return SystemSettingRepository(session)
-
-
 def get_system_setting_uow(
-    session: Annotated[Session, Depends(PGSession())],
-    system_setting_repo: Annotated[SystemSettingRepository, Depends(get_system_setting_repository)]
+    session: Annotated[Session, Depends(PGSession())]
 ) -> SystemSettingUnitOfWork:
-    return SystemSettingUnitOfWork(session, system_setting_repo)
+    print(f"DEBUG: Creating SystemSettingUnitOfWork with session: {session}")
+    # 같은 session으로 repository 생성
+    repository = SystemSettingRepository(session)
+    print(f"DEBUG: Creating SystemSettingRepository with same session")
+    return SystemSettingUnitOfWork(session, repository)
 
 
 def get_system_setting_service(uow: Annotated[SystemSettingUnitOfWork, Depends(get_system_setting_uow)]) -> SystemSettingService:
+    print("DEBUG: Creating SystemSettingService")
     return SystemSettingService(uow)
