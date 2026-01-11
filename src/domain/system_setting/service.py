@@ -9,6 +9,6 @@ class SystemSettingService:
 
     def create(self, data: SystemSettingCreate) -> SystemSetting:
         with self.uow:
-            result = self.uow.system_setting.create(data)
+            result = self.uow.system_setting.create(data.model_dump())
         return result
 
