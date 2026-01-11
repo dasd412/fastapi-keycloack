@@ -15,7 +15,7 @@ app.add_middleware(
 )
 
 app.add_middleware(GZipMiddleware)
-app.include_router(prefix="/api/v1", router=api_gateway.router)
+app.include_router(prefix="/api/v1", router=api_gateway.basic_router)
 
 if __name__ == "__main__":
     uvicorn.run(

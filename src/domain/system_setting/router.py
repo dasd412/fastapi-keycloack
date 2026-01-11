@@ -1,10 +1,10 @@
 from fastapi import APIRouter,status
 
-hello_router = APIRouter(prefix="/hello")
+system_setting_router = APIRouter(prefix="/system_setting")
 
 
-@hello_router.get(path="",
+@system_setting_router.get(path="",
             response_model_exclude_none=True,
             status_code=status.HTTP_200_OK)
-def get_hello():
+def get():
     return {"message": "Hello World"}

@@ -1,14 +1,14 @@
 from pydantic import BaseModel
 
-class HelloRead(BaseModel):
+class SystemSettingRead(BaseModel):
     key: str
     value: str | None = None
 
 
-class HelloCreate(BaseModel):
+class SystemSettingCreate(BaseModel):
     key: str
     value: str | None = None
 
 
-class HelloUpdate(BaseModel):
+class SystemSettingUpdate(BaseModel):
     value: str | None = None
