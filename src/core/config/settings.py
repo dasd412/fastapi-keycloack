@@ -18,6 +18,7 @@ class Settings(PostgresSettings):
     appname: str = "keycloak-poc"
     uvicorn_reload: bool = False
     uvicorn_port: int = 8000
+    loglevel: str = "INFO"
     model_config = ConfigDict(extra="allow")
 
 
