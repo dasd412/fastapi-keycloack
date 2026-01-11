@@ -2,7 +2,7 @@ from functools import cache
 
 from sqlalchemy.engine import URL
 from sqlalchemy.orm import sessionmaker
-from sqlmodel import SQLModel, create_engine
+from sqlmodel import Session, SQLModel, create_engine
 from sqlmodel.pool import StaticPool
 
 from core.config.settings import get_settings
@@ -33,8 +33,9 @@ def get_engine():
 
 @cache
 def get_session_factory():
-    """sessionmaker를 사용하여 Session factory 생성"""
+    """sessionmaker를 사용하여 SQLModel Session factory 생성"""
     return sessionmaker(
+        class_=Session,  # SQLModel의 Session 사용
         autocommit=False,
         autoflush=False,
         expire_on_commit=False,
@@ -46,10 +47,7 @@ class PGSession:
     def __call__(self):
         SessionLocal = get_session_factory()
         session = SessionLocal()
-        print(f"DEBUG: PGSession - Created session: {session}")
         try:
             yield session
         finally:
-            print(f"DEBUG: PGSession - Closing session")
             session.close()
-            print(f"DEBUG: PGSession - Session closed")
