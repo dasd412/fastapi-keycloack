@@ -1,3 +1,10 @@
+# Keycloak POC
+
+> **개인 학습 프로젝트**
+> FastAPI, SQLModel, Repository Pattern, Unit of Work 패턴을 학습하기 위한 POC 프로젝트입니다.
+
+---
+
 # 실행 방법
 
 ## 패키지 관리 (uv)
@@ -118,6 +125,119 @@ sync endpoint와 async endpoint 구분해서 unit of work와 repository 구현�
 
 ## 라우터 추가하려면
 api_gateway에 추가할 것
+
+---
+
+# 모노레포 통합 방법
+
+이 프로젝트를 더 큰 모노레포의 구성원으로 추가하는 방법입니다.
+
+## 디렉토리 구조
+
+```
+monorepo/
+├── services/
+│   ├── keycloak-poc/          # 이 프로젝트
+│   │   ├── src/
+│   │   ├── pyproject.toml
+│   │   └── README.md
+│   ├── another-service/
+│   └── worker-service/
+├── libs/
+│   └── shared/                # 공통 라이브러리 (선택사항)
+├── pyproject.toml             # 워크스페이스 설정
+└── README.md
+```
+
+---
+
+## 통합 단계
+
+### 1. 프로젝트 이동
+
+```bash
+# 모노레포 루트에서
+mkdir -p services/keycloak-poc
+cp -r /path/to/keycloak-poc/* services/keycloak-poc/
+```
+
+또는 Git 히스토리를 보존하려면:
+
+```bash
+# 모노레포 루트에서
+git subtree add --prefix=services/keycloak-poc \
+  https://github.com/username/keycloak-poc.git main
+```
+
+---
+
+### 2. 워크스페이스 설정
+
+**monorepo/pyproject.toml** 생성 또는 수정:
+
+```toml
+[tool.uv.workspace]
+members = [
+    "services/*",
+    "libs/*"
+]
+```
+
+---
+
+### 3. 의존성 동기화
+
+```bash
+# 모노레포 루트에서
+uv sync
+```
+
+---
+
+## 실행 방법
+
+### 독립 실행
+```bash
+cd services/keycloak-poc
+uv run python src/main.py
+```
+
+### 모노레포 루트에서 실행
+```bash
+# 특정 서비스 실행
+uv run --package keycloak-poc python src/main.py
+```
+
+---
+
+## 공통 라이브러리 사용 (선택사항)
+
+서비스 간 코드 공유가 필요한 경우:
+
+**services/keycloak-poc/pyproject.toml:**
+```toml
+[project]
+dependencies = [
+    "shared-lib",  # libs/shared 참조
+    "fastapi>=0.128.0",
+    # ... 기타 의존성
+]
+```
+
+**libs/shared/pyproject.toml:**
+```toml
+[project]
+name = "shared-lib"
+version = "0.1.0"
+```
+
+---
+
+## 주의사항
+
+- Import 경로는 변경 불필요 (각 서비스가 독립적)
+- 각 서비스의 `src/`가 source root로 유지됨
+- uv workspace가 의존성을 자동으로 관리
 
 ---
 
