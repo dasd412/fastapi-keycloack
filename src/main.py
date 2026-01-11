@@ -3,8 +3,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 
-import api_gateway
-from settings import get_settings
+from domain import api_gateway
+from core.settings import get_settings
 app = FastAPI()
 
 app.add_middleware(
