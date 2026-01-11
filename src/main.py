@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 
-from core.router import api_gateway
+import api_gateway
 from core.config.settings import get_settings
 app = FastAPI()
 

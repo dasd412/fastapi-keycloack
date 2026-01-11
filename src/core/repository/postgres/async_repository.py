@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import exists as sql_exists
 from sqlmodel import select, SQLModel, col
 
-from core.repository.base_model import BaseModel
+from core.repository.postgres.base_model import BaseModel
 
 T = TypeVar("T", bound=BaseModel)
 

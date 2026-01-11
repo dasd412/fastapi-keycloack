@@ -5,7 +5,7 @@ from sqlalchemy import func
 from sqlmodel import Session, select, SQLModel, col
 from sqlalchemy import exists as sql_exists
 
-from core.repository.base_model import BaseModel
+from core.repository.postgres.base_model import BaseModel
 
 T = TypeVar('T', bound=BaseModel)  # BaseModel로 제약 추가
 

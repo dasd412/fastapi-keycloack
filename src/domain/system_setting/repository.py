@@ -1,6 +1,6 @@
 from sqlmodel import Session, select
 
-from core.repository.postgres_repository import PostgresRepository
+from core.repository.postgres.repository import PostgresRepository
 from domain.system_setting.models import SystemSetting
 
 

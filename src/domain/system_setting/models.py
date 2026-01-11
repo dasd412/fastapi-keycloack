@@ -1,7 +1,6 @@
 from sqlmodel import Field
 
-from core.repository.base_model import BaseModel
-
+from core.repository.postgres.base_model import BaseModel
 
 class SystemSetting(BaseModel, table=True):
     __tablename__ = "system_setting"
