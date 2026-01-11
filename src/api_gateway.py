@@ -1,7 +1,8 @@
 from fastapi import APIRouter
+
 from domain.system_setting.router import system_setting_router
 
-basic_router=APIRouter()
+basic_router = APIRouter()
 
 """
 router가 추가될 때마다 여기에 추가하세요

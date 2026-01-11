@@ -2,6 +2,7 @@ from sqlmodel import Field
 
 from core.repository.postgres.base_model import BaseModel
 
+
 class SystemSetting(BaseModel, table=True):
     __tablename__ = "system_setting"
 

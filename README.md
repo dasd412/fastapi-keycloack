@@ -1,3 +1,85 @@
+# 실행 방법
+
+## 패키지 관리 (uv)
+
+### 패키지 추가
+```bash
+uv add fastapi sqlalchemy
+```
+
+### dev 패키지 추가
+```bash
+uv add --dev pytest black
+```
+
+### 패키지 제거
+```bash
+uv remove requests
+```
+
+### 의존성 동기화 (설치)
+```bash
+uv sync
+```
+
+### 의존성 잠금 (uv.lock 업데이트)
+```bash
+uv lock
+```
+
+---
+
+## 서버 실행
+
+### FastAPI 서버 실행
+```bash
+uv run uvicorn main:app --reload
+```
+
+### Python 스크립트 실행
+```bash
+ENVFILE=envs/test.env uv run python src/main.py
+```
+
+---
+
+## 코드 품질 관리 (ruff)
+
+### Linting
+전체 검사:
+```bash
+uv run ruff check src/
+```
+
+자동 수정:
+```bash
+uv run ruff check src/ --fix
+```
+
+Unsafe 수정 포함:
+```bash
+uv run ruff check src/ --fix --unsafe-fixes
+```
+
+### Formatting
+포맷 적용:
+```bash
+uv run ruff format src/
+```
+
+포맷 검사만 (변경 안 함):
+```bash
+uv run ruff format src/ --check
+```
+
+### 통합 (추천)
+Lint + Format 한 번에:
+```bash
+uv run ruff check src/ --fix && uv run ruff format src/
+```
+
+---
+
 # 규칙
 ## core, domain 패키지 구분
 core는 도메인을 몰라야 한다. 
@@ -38,3 +120,4 @@ sync endpoint와 async endpoint 구분해서 unit of work와 repository 구현�
 api_gateway에 추가할 것
 
 ---
+

@@ -5,6 +5,7 @@ from pydantic import ConfigDict
 from sqlalchemy import func
 from sqlmodel import Field, SQLModel, text
 
+
 class BaseModel(SQLModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 

@@ -1,43 +1,40 @@
-from typing import TypeVar, Generic, Type, Optional, List, Dict, Any
+from typing import Any, TypeVar
 from uuid import UUID
 
-from sqlalchemy import func
-from sqlmodel import Session, select, SQLModel, col
 from sqlalchemy import exists as sql_exists
+from sqlalchemy import func
+from sqlmodel import Session, SQLModel, col, select
 
 from core.repository.postgres.base_model import BaseModel
 
-T = TypeVar('T', bound=BaseModel)  # BaseModel로 제약 추가
+T = TypeVar("T", bound=BaseModel)  # BaseModel로 제약 추가
 
 
-class PostgresRepository(Generic[T]):
+class PostgresRepository[T: BaseModel]:
     """
     transaction 처리는 unit of work에서 담당합니다.
     커밋과 롤백은 반드시 unit of work를 활용하세요. 리포지토리는 flush()만 할 뿐입니다.
     """
 
-    def __init__(self, session: Session, model: Type[T]):
+    def __init__(self, session: Session, model: type[T]):
         self.session = session
         self.model = model
 
-    def create(self, data: SQLModel | Dict[str, Any]) -> T:
-        if isinstance(data, dict):
-            instance = self.model(**data)
-        else:
-            instance = self.model.model_validate(data)
+    def create(self, data: SQLModel | dict[str, Any]) -> T:
+        instance = self.model(**data) if isinstance(data, dict) else self.model.model_validate(data)
 
         self.session.add(instance)
         self.session.flush()
         self.session.refresh(instance)
         return instance
 
-    def get_by_id(self, uuid: UUID) -> Optional[T]:
-        result = self.session.exec(
-            select(self.model).where(col(self.model.id) == uuid)
-        )
+    def get_by_id(self, uuid: UUID) -> T | None:
+        result = self.session.exec(select(self.model).where(col(self.model.id) == uuid))
         return result.one_or_none()
 
-    def get_list(self, offset: int = 0, limit: int = 10,  order_by: Optional[str] = None,**filters) -> List[T]:
+    def get_list(
+        self, offset: int = 0, limit: int = 10, order_by: str | None = None, **filters
+    ) -> list[T]:
         """
         필터링 예시:
         repo.get_list(offset=0, limit=10, name="John",status="active")
@@ -64,7 +61,7 @@ class PostgresRepository(Generic[T]):
 
         return list(result.all())
 
-    def update(self, uuid: UUID, data: SQLModel | Dict[str, Any]) -> Optional[T]:
+    def update(self, uuid: UUID, data: SQLModel | dict[str, Any]) -> T | None:
         db_item = self.get_by_id(uuid)
 
         if not db_item:
@@ -86,7 +83,6 @@ class PostgresRepository(Generic[T]):
             return True
         return False
 
-
     def count(self, **filters) -> int:
         query = select(func.count()).select_from(self.model)
 
@@ -95,7 +91,6 @@ class PostgresRepository(Generic[T]):
                 query = query.where(getattr(self.model, key) == value)
 
         return self.session.exec(query).one()
-
 
     def exists(self, uuid: UUID) -> bool:
         query = select(sql_exists().where(col(self.model.id) == uuid))

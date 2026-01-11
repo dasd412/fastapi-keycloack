@@ -5,6 +5,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 
 import api_gateway
 from core.config.settings import get_settings
+
 app = FastAPI()
 
 app.add_middleware(

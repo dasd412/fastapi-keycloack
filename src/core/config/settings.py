@@ -1,8 +1,8 @@
 import os
 from functools import cache
 
-from pydantic_settings import BaseSettings
 from pydantic import ConfigDict
+from pydantic_settings import BaseSettings
 
 
 class PostgresSettings(BaseSettings):
@@ -14,13 +14,11 @@ class PostgresSettings(BaseSettings):
     create_tables: bool = False
 
 
-class Settings(
-    PostgresSettings
-):
+class Settings(PostgresSettings):
     appname: str = "keycloak-poc"
     uvicorn_reload: bool = False
     uvicorn_port: int = 8000
-    model_config = ConfigDict(extra='allow')
+    model_config = ConfigDict(extra="allow")
 
 
 @cache
