@@ -1,10 +1,10 @@
 from sqlmodel import Session, select
 
-from core.repository.sync_postgres_repository import SyncPostgresRepository
+from core.repository.postgres_repository import PostgresRepository
 from domain.system_setting.models import SystemSetting
 
 
-class SyncSystemSettingRepository(SyncPostgresRepository[SystemSetting]):
+class SystemSettingRepository(PostgresRepository[SystemSetting]):
 
     def __init__(self, session: Session):
         super().__init__(session, SystemSetting)

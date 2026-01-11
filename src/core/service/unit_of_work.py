@@ -1,7 +1,7 @@
 from sqlmodel import Session
 
 
-class SyncUnitOfWork:
+class UnitOfWork:
     """
     Base UnitOfWork - 트랜잭션 관리만 담당. 각 도메인에서 상속하여 리포지토리 추가
     서비스 레이어에서 단일 엔티티에 대한 트랜잭션이든, 여러 엔티티들에 대한 트랜잭션이던 상관 없이 이 클래스를 상속해서 사용하세요.

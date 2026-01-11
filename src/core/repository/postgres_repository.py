@@ -10,7 +10,7 @@ from core.repository.base_model import BaseModel
 T = TypeVar('T', bound=BaseModel)  # BaseModel로 제약 추가
 
 
-class SyncPostgresRepository(Generic[T]):
+class PostgresRepository(Generic[T]):
     """
     transaction 처리는 unit of work에서 담당합니다.
     커밋과 롤백은 반드시 unit of work를 활용하세요. 리포지토리는 flush()만 할 뿐입니다.
