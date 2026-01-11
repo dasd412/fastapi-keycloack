@@ -1,8 +1,10 @@
 from uuid import UUID
 
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Depends
 
-from domain.system_setting.schemas import SystemSettingCreate, SystemSettingRead
+from domain.system_setting.dependencies import get_system_setting_service
+from domain.system_setting.schemas import SystemSettingCreate, SystemSettingRead, SystemSettingUpdate
+from domain.system_setting.service import SystemSettingService
 
 system_setting_router = APIRouter(prefix="/system_setting")
 
@@ -13,7 +15,7 @@ system_setting_router = APIRouter(prefix="/system_setting")
     response_model_exclude_none=True,
     status_code=status.HTTP_201_CREATED,
 )
-def create(item: SystemSettingCreate):
+def create(item: SystemSettingCreate, service: SystemSettingService = Depends(get_system_setting_service)):
     pass
 
 
@@ -23,7 +25,7 @@ def create(item: SystemSettingCreate):
     response_model_exclude_none=True,
     status_code=status.HTTP_200_OK,
 )
-def get(uuid: UUID):
+def get(uuid: UUID,  service: SystemSettingService = Depends(get_system_setting_service)):
     pass
 
 
@@ -33,7 +35,7 @@ def get(uuid: UUID):
     response_model_exclude_none=True,
     status_code=status.HTTP_200_OK,
 )
-def get_list():
+def get_list(service: SystemSettingService = Depends(get_system_setting_service)):
     pass
 
 
@@ -43,7 +45,7 @@ def get_list():
     response_model_exclude_none=True,
     status_code=status.HTTP_200_OK,
 )
-def get_by_key(key: str):
+def get_by_key(key: str, service: SystemSettingService = Depends(get_system_setting_service)):
     pass
 
 
@@ -51,7 +53,7 @@ def get_by_key(key: str):
     path="/{id_}",
     status_code=status.HTTP_204_NO_CONTENT,
 )
-def update():
+def update(uuid: UUID, target: SystemSettingUpdate, service: SystemSettingService = Depends(get_system_setting_service)):
     pass
 
 
@@ -59,5 +61,5 @@ def update():
     path="/{id_}",
     status_code=status.HTTP_204_NO_CONTENT,
 )
-def delete(uuid: UUID):
+def delete(uuid: UUID, service: SystemSettingService = Depends(get_system_setting_service)):
     pass

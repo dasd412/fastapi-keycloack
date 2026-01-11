@@ -1,14 +1,16 @@
-# # dependencies.py - 여기서 의존성 조립
-# from sqlalchemy.ext.asyncio import AsyncSession
-#
-# async def get_db():
-#     async with SessionLocal() as session:
-#         yield session
-#
-# async def get_post_repository(db: AsyncSession = Depends(get_db)):
-#     return PostRepository(db)
-#
-# async def get_post_service(
-#     repository: PostRepository = Depends(get_post_repository)
-# ):
-#     return PostService(repository)
+from typing import Annotated
+
+from fastapi import Depends
+from sqlmodel import Session
+
+from core.repository.postgres.session import PGSession
+from domain.system_setting.repository import SystemSettingRepository
+from domain.system_setting.service import SystemSettingService
+
+
+def get_system_setting_repository(session: Annotated[Session, Depends(PGSession())]) -> SystemSettingRepository:
+    return SystemSettingRepository(session)
+
+
+def get_system_setting_service(repository: Annotated[SystemSettingRepository, Depends(get_system_setting_repository)])-> SystemSettingService:
+    return SystemSettingService(repository)
